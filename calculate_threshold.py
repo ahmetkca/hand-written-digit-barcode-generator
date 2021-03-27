@@ -17,9 +17,9 @@ while degree < constants.MAX_DEGREE: # loop from MIN_DEGREE to MAX_DEGREE by STE
         for imageName in os.listdir(directory): # loop thorugh every file in the directory
             print(str(os.path.join(directory, imageName)))
             opcv = cv2.imread(os.path.join(directory, imageName), 0) # read image file as cv2 image
-            ret2, th2 = cv2.threshold(opcv, 0, 255, cv2.THRESH_OTSU) # apply threshold it just makes pixel values either black or white
+            # ret2, th2 = cv2.threshold(opcv, 0, 255, cv2.THRESH_OTSU) # apply threshold it just makes pixel values either black or white
         
-            img = Image.fromarray(th2) # create image from thresholded 2d image array
+            img = Image.fromarray(opcv) # create image from thresholded 2d image array
             rotated_image = img.rotate(degree) # rotate the image
             image2d = np.array(rotated_image) # get 2d representation of the rotated image
             

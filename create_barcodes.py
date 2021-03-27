@@ -11,7 +11,8 @@ with open('./thresholds.txt', 'r') as f:
     threshold = f.readline()
     while threshold:
         threshold = threshold.rstrip("\n")
-        thresholds.append(int(math.ceil(float(threshold))))
+        # thresholds.append(int(math.ceil(float(threshold))))
+        thresholds.append(float(threshold))
         threshold = f.readline()
     f.close()
 
@@ -21,9 +22,9 @@ def create_barcode(imagePath):
     barcode = []
 
     opcv = cv2.imread(imagePath, 0) # read image file as cv2 image
-    ret2, th2 = cv2.threshold(opcv, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU) # apply threshold it just makes pixel values either black or white
+    # ret2, th2 = cv2.threshold(opcv, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU) # apply threshold it just makes pixel values either black or white
         
-    img = Image.fromarray(th2) # create image from thresholded 2d image array
+    img = Image.fromarray(opcv) # create image from thresholded 2d image array
 
 
     barcode = []
