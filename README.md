@@ -8,3 +8,9 @@ On Powershell
 ```
 .\run.bat
 ```
+
+On Command Prompt
+
+```
+run.bat
+```
