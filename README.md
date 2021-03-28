@@ -1,5 +1,22 @@
 # hand-written-digit-barcode-generator
 
+First create a python virtual environment
+```
+py -m venv .venv
+```
+
+After you created the venv you need to activate it
+on Powershell
+```
+.\.venv\Scripts\Activate.ps1
+```
+
+You can install all the requirments by typing command line (you need to activate venv first)
+
+```
+pip install -r requirements.txt
+```
+
 You can configure the constants.py file before running the run.bat
 
 After you configured you can run the run.bat by
