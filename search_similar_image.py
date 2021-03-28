@@ -120,6 +120,23 @@ class SearchSimilar:
     def __init__(self):
         self.digitSelectMenu()
 
+    def findSimilar(self, inputBarcode):
+        minHMD = (constants.IMAGE_SIZE*constants.NUM_PROJECTIONS)+1
+        print(minHMD)
+        minBarcode = None
+        imageLoc = None
+        for i, barcode in enumerate(barcodes):
+            print(imageLocations[i])
+            currentHMD = hammingDistance( barcode, inputBarcode)
+            print(currentHMD)
+            if currentHMD == 0:
+                continue
+            elif currentHMD < minHMD:
+                minHMD = currentHMD
+                minBarcode = barcode
+                imageLoc = imageLocations[i]
+        return minHMD, minBarcode, imageLoc
+
     def digitSelectMenu(self):
         digitFolder = int(input("enter a digit (0 - 9): "))
         while digitFolder >= 0 and digitFolder <= 9:
@@ -202,9 +219,40 @@ class SearchSimilar:
 
             plt.show()
             digitFolder = int(input("enter a digit (0 - 9): "))
+        
+    def showAllResults(self):
+        fig = plt.figure(figsize=(10, 7))
+        rows, cols = constants.NUMBER_OF_DIGITS*constants.NUMBER_IMAGES, 2
+        for currDigit in range(constants.NUMBER_OF_DIGITS): # loop through 0 to NUMBER_OF_DIGITS-1  
+            directory = r'./MNIST_DS/{}'.format(currDigit) # digit folder path
+            for i, imageName in zip((i for i in range(1, 20, 2)), os.listdir(directory)): # loop thorugh every file in the directory
+                selectedImagePath = os.path.join(directory, imageName)
+                print("Checking image {}".format(os.path.join(directory, imageName)))
+                searchBarcode = create_barcode(os.path.join(directory, imageName))
+                hmd, resultBarcode, resultImgLoc = self.findSimilar(searchBarcode)
+                selectedImage = cv2.imread(selectedImagePath)
+                resultImageRelativePath = resultImgLoc.split("_", 1)
+                resultImagePath = os.path.join(r".\MNIST_DS", r"{}\{}".format(resultImageRelativePath[0], resultImageRelativePath[1]))
+                resultImage = cv2.imread(resultImagePath)
+
+                sii = currDigit*20+i
+                fig.add_subplot(rows, cols, sii)
+                plt.imshow(selectedImage)
+                plt.axis("off")
+                plt.title(selectedImagePath)
+                fig.add_subplot(rows, cols, sii+1)
+                plt.imshow(resultImage)
+                plt.axis("off")
+                plt.title(resultImagePath)
+            
+        plt.show()
+
+
 
 if __name__ == "__main__":
     si = SearchSimilar()
+    si.showAllResults()
+    exit()
     cahr = CalculateAccuracyHitRatio(barcodes, imageLocations)
     print(cahr.calculateAccuracy())
     # sc = SearchSimilar()
