@@ -5,7 +5,7 @@ import constants
 import os
 import math
 import matplotlib.pyplot as plt
-import matplotlib.image as npimg
+import time
 
 def create_barcode(imagePath):
     barcode = []
@@ -76,83 +76,212 @@ with open("barcodes.txt", 'r') as f:
     f.close()
 
 
-# for img_index, imageLocation in enumerate(imageLocations):
-#     print(imageLocation, " ", barcodes[img_index])
+class CalculateAccuracyHitRatio:
+    def __init__(self, barcodes, imageLocations):
+        self.barcodes = barcodes
+        self.imageLocations = imageLocations
 
-digitFolder = int(input("enter a digit (0 - 9): "))
+    def calculateAccuracy(self):
+        accuracy = lambda x : x / 100
+        successCount = 0
+        for currDigit in range(constants.NUMBER_OF_DIGITS): # loop through 0 to NUMBER_OF_DIGITS-1  
+            directory = r'./MNIST_DS/{}'.format(currDigit) # digit folder path
+            for imageName in os.listdir(directory): # loop thorugh every file in the directory
+                print("Checking image {}".format(os.path.join(directory, imageName)))
+                searchBarcode = create_barcode(os.path.join(directory, imageName))
+                s, hd, resultImgLoc, resultImgBarcode = self.checkSuccess(searchBarcode, currDigit)
+                print("\tHamming Distance: {}\n\tResult Image: {}".format(hd, resultImgLoc))
+                time.sleep(0.5/4)
+                if s:
+                    successCount += 1
+        hitRatio = accuracy(successCount)
+        return hitRatio
 
-directory = r'.\MNIST_DS\{}'.format(digitFolder)
+    def checkSuccess(self, searchBarcode, searchDigitGroup):
+        success = False
+        minHMD = (constants.IMAGE_SIZE*constants.NUM_PROJECTIONS)+1
+        minBarcode = None
+        imageLoc = None
+        for i, barcode in enumerate(self.barcodes):
+            currentHMD = hammingDistance( barcode, searchBarcode)
+            if currentHMD == 0:
+                continue
+            elif currentHMD < minHMD:
+                minHMD = currentHMD
+                minBarcode = barcode
+                imageLoc = self.imageLocations[i]
 
-for c, imageName in enumerate(os.listdir(directory)):
-    print(c , " - ", imageName)
+        resultDigitGroup = imageLoc.split("_", 1)[0]
+        if int(resultDigitGroup) == int(searchDigitGroup):
+            success = True
+        return success, minHMD, imageLoc, minBarcode
 
-selectImage = int(input("select image from above list: "))
+class SearchSimilar:
+    def __init__(self):
+        self.digitSelectMenu()
 
-selectedImagePath = os.path.join(directory, os.listdir(directory)[selectImage])
+    def digitSelectMenu(self):
+        digitFolder = int(input("enter a digit (0 - 9): "))
+        while digitFolder >= 0 and digitFolder <= 9:
+            
+            directory = r'.\MNIST_DS\{}'.format(digitFolder)
 
-print(selectedImagePath)
+            for c, imageName in enumerate(os.listdir(directory)):
+                print(c , " - ", imageName)
 
-selectedImageBarcode = create_barcode(selectedImagePath)
+            selectImage = int(input("select image from above list: "))
 
-minHMD = (constants.IMAGE_SIZE*constants.NUM_PROJECTIONS)+1
-print(minHMD)
-minBarcode = None
-imageLoc = None
-for i, barcode in enumerate(barcodes):
-    print(imageLocations[i])
-    currentHMD = hammingDistance( barcode,selectedImageBarcode)
-    print(currentHMD)
-    if currentHMD == 0:
-        continue
-    elif currentHMD < minHMD:
-        minHMD = currentHMD
-        minBarcode = barcode
-        imageLoc = imageLocations[i]
+            selectedImagePath = os.path.join(directory, os.listdir(directory)[selectImage])
 
-print("Result:")
-print("\tHD: {}".format(minHMD))
-print("\tImage Location: {}".format(imageLoc))
-print("\tBarcode: {}".format(minBarcode))
+            print(selectedImagePath)
 
-fig = plt.figure(figsize=(10, 7))
-fig.suptitle("Hamming Distance: {}".format(minHMD))
-rows, columns = 2, 2
+            selectedImageBarcode = create_barcode(selectedImagePath)
 
-selectedImage = cv2.imread(selectedImagePath)
-resultImageRelativePath = imageLoc.split("_", 1)
-resultImagePath = os.path.join(r".\MNIST_DS", r"{}\{}".format(resultImageRelativePath[0], resultImageRelativePath[1]))
-resultImage = cv2.imread(resultImagePath)
+            minHMD = (constants.IMAGE_SIZE*constants.NUM_PROJECTIONS)+1
+            print(minHMD)
+            minBarcode = None
+            imageLoc = None
+            for i, barcode in enumerate(barcodes):
+                print(imageLocations[i])
+                currentHMD = hammingDistance( barcode,selectedImageBarcode)
+                print(currentHMD)
+                if currentHMD == 0:
+                    continue
+                elif currentHMD < minHMD:
+                    minHMD = currentHMD
+                    minBarcode = barcode
+                    imageLoc = imageLocations[i]
 
-from create_barcode_image import BarcodeImageGenerator as big
+            print("Result:")
+            print("\tHD: {}".format(minHMD))
+            print("\tImage Location: {}".format(imageLoc))
+            print("\tBarcode: {}".format(minBarcode))
 
-big.generate_barcode_image(selectedImageBarcode, r".\temp\searchImage.png")
-big.generate_barcode_image(minBarcode, r".\temp\resultImage.png")
+            
 
-searchBarcodeImage = cv2.imread(r".\temp\searchImage.png")
-resultBarcodeImage = cv2.imread(r".\temp\resultImage.png")
+            fig = plt.figure(figsize=(10, 7))
+            fig.suptitle("Hamming Distance: {}".format(minHMD))
+            rows, columns = 2, 2
 
-fig.add_subplot(rows, columns, 1)
+            selectedImage = cv2.imread(selectedImagePath)
+            resultImageRelativePath = imageLoc.split("_", 1)
+            resultImagePath = os.path.join(r".\MNIST_DS", r"{}\{}".format(resultImageRelativePath[0], resultImageRelativePath[1]))
+            resultImage = cv2.imread(resultImagePath)
 
-plt.imshow(selectedImage)
-plt.axis("off")
-plt.title("Search Image")
+            from create_barcode_image import BarcodeImageGenerator as big
 
-fig.add_subplot(rows, columns, 2)
+            big.generate_barcode_image(selectedImageBarcode, r".\temp\searchImage.png")
+            big.generate_barcode_image(minBarcode, r".\temp\resultImage.png")
 
-plt.imshow(resultImage)
-plt.axis("off")
-plt.title("Result Image")
+            searchBarcodeImage = cv2.imread(r".\temp\searchImage.png")
+            resultBarcodeImage = cv2.imread(r".\temp\resultImage.png")
 
-fig.add_subplot(rows, columns, 3)
+            fig.add_subplot(rows, columns, 1)
 
-plt.imshow(searchBarcodeImage)
-plt.axis("off")
-plt.title("Search Barcode")
+            plt.imshow(selectedImage)
+            plt.axis("off")
+            plt.title("Search Image")
 
-fig.add_subplot(rows, columns, 4)
+            fig.add_subplot(rows, columns, 2)
 
-plt.imshow(resultBarcodeImage)
-plt.axis("off")
-plt.title("Result Barcode")
+            plt.imshow(resultImage)
+            plt.axis("off")
+            plt.title("Result Image")
 
-plt.show()
+            fig.add_subplot(rows, columns, 3)
+
+            plt.imshow(searchBarcodeImage)
+            plt.axis("off")
+            plt.title("Search Barcode")
+
+            fig.add_subplot(rows, columns, 4)
+
+            plt.imshow(resultBarcodeImage)
+            plt.axis("off")
+            plt.title("Result Barcode")
+
+            plt.show()
+            digitFolder = int(input("enter a digit (0 - 9): "))
+
+if __name__ == "__main__":
+    cahr = CalculateAccuracyHitRatio(barcodes, imageLocations)
+    print(cahr.calculateAccuracy())
+    # sc = SearchSimilar()
+
+# digitFolder = int(input("enter a digit (0 - 9): "))
+
+# directory = r'.\MNIST_DS\{}'.format(digitFolder)
+
+# for c, imageName in enumerate(os.listdir(directory)):
+#     print(c , " - ", imageName)
+
+# selectImage = int(input("select image from above list: "))
+
+# selectedImagePath = os.path.join(directory, os.listdir(directory)[selectImage])
+
+# print(selectedImagePath)
+
+# selectedImageBarcode = create_barcode(selectedImagePath)
+
+# minHMD = (constants.IMAGE_SIZE*constants.NUM_PROJECTIONS)+1
+# print(minHMD)
+# minBarcode = None
+# imageLoc = None
+# for i, barcode in enumerate(barcodes):
+#     print(imageLocations[i])
+#     currentHMD = hammingDistance( barcode,selectedImageBarcode)
+#     print(currentHMD)
+#     if currentHMD == 0:
+#         continue
+#     elif currentHMD < minHMD:
+#         minHMD = currentHMD
+#         minBarcode = barcode
+#         imageLoc = imageLocations[i]
+
+# print("Result:")
+# print("\tHD: {}".format(minHMD))
+# print("\tImage Location: {}".format(imageLoc))
+# print("\tBarcode: {}".format(minBarcode))
+
+# fig = plt.figure(figsize=(10, 7))
+# fig.suptitle("Hamming Distance: {}".format(minHMD))
+# rows, columns = 2, 2
+
+# selectedImage = cv2.imread(selectedImagePath)
+# resultImageRelativePath = imageLoc.split("_", 1)
+# resultImagePath = os.path.join(r".\MNIST_DS", r"{}\{}".format(resultImageRelativePath[0], resultImageRelativePath[1]))
+# resultImage = cv2.imread(resultImagePath)
+
+# from create_barcode_image import BarcodeImageGenerator as big
+
+# big.generate_barcode_image(selectedImageBarcode, r".\temp\searchImage.png")
+# big.generate_barcode_image(minBarcode, r".\temp\resultImage.png")
+
+# searchBarcodeImage = cv2.imread(r".\temp\searchImage.png")
+# resultBarcodeImage = cv2.imread(r".\temp\resultImage.png")
+
+# fig.add_subplot(rows, columns, 1)
+
+# plt.imshow(selectedImage)
+# plt.axis("off")
+# plt.title("Search Image")
+
+# fig.add_subplot(rows, columns, 2)
+
+# plt.imshow(resultImage)
+# plt.axis("off")
+# plt.title("Result Image")
+
+# fig.add_subplot(rows, columns, 3)
+
+# plt.imshow(searchBarcodeImage)
+# plt.axis("off")
+# plt.title("Search Barcode")
+
+# fig.add_subplot(rows, columns, 4)
+
+# plt.imshow(resultBarcodeImage)
+# plt.axis("off")
+# plt.title("Result Barcode")
+
+# plt.show()
