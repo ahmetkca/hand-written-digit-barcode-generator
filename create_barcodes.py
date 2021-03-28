@@ -18,6 +18,8 @@ with open('./thresholds.txt', 'r') as f:
 
 barcodes = [] # stores every individual barcode for 100 images
 
+
+
 def create_barcode(imagePath):
     barcode = []
 
@@ -50,7 +52,6 @@ def create_barcode(imagePath):
         degree += constants.STEP_DEGREE
 
     return barcode
-
 
 for currDigit in range(constants.NUMBER_OF_DIGITS): # loop through 0 to NUMBER_OF_DIGITS-1  
     

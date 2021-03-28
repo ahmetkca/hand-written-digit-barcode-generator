@@ -7,6 +7,42 @@ import math
 import matplotlib.pyplot as plt
 import time
 
+
+def hammingDistance(v1, v2):
+    t = 0
+    for i in range(len(v1)):
+        if v1[i] != v2[i]:
+            t += 1
+    return t
+
+# read thresholds from thresholds.txt and then store them into thresholds list
+thresholds = []
+with open('./thresholds.txt', 'r') as f:
+    threshold = f.readline()
+    while threshold:
+        threshold = threshold.rstrip("\n")
+        thresholds.append(float(threshold))
+        threshold = f.readline()
+    f.close()
+
+
+# read barcode and image location from barcodes.txt file
+imageLocations = []
+barcodes = []
+with open("barcodes.txt", 'r') as f:
+    line = f.readline()
+    while line:
+        line = line.rstrip("\n")
+        line = line.split(",")
+        imageLocation = line.pop()
+        barcode = []
+        for bit in line:
+            barcode.append(int(bit))
+        imageLocations.append(imageLocation)
+        barcodes.append(barcode)
+        line = f.readline()
+    f.close()
+
 def create_barcode(imagePath):
     barcode = []
 
@@ -40,42 +76,6 @@ def create_barcode(imagePath):
 
     return barcode
 
-def hammingDistance(v1, v2):
-    t = 0
-    for i in range(len(v1)):
-        if v1[i] != v2[i]:
-            t += 1
-    return t
-
-# read thresholds from thresholds.txt and then store them into thresholds list
-thresholds = []
-with open('./thresholds.txt', 'r') as f:
-    threshold = f.readline()
-    while threshold:
-        threshold = threshold.rstrip("\n")
-        thresholds.append(int(math.ceil(float(threshold))))
-        threshold = f.readline()
-    f.close()
-
-
-# read barcode and image location from barcodes.txt file
-imageLocations = []
-barcodes = []
-with open("barcodes.txt", 'r') as f:
-    line = f.readline()
-    while line:
-        line = line.rstrip("\n")
-        line = line.split(",")
-        imageLocation = line.pop()
-        barcode = []
-        for bit in line:
-            barcode.append(int(bit))
-        imageLocations.append(imageLocation)
-        barcodes.append(barcode)
-        line = f.readline()
-    f.close()
-
-
 class CalculateAccuracyHitRatio:
     def __init__(self, barcodes, imageLocations):
         self.barcodes = barcodes
@@ -91,24 +91,24 @@ class CalculateAccuracyHitRatio:
                 searchBarcode = create_barcode(os.path.join(directory, imageName))
                 s, hd, resultImgLoc, resultImgBarcode = self.checkSuccess(searchBarcode, currDigit)
                 print("\tHamming Distance: {}\n\tResult Image: {}".format(hd, resultImgLoc))
-                time.sleep(0.5/4)
+                # time.sleep(0.5/4)
                 if s:
                     successCount += 1
         hitRatio = accuracy(successCount)
         return hitRatio
 
     def checkSuccess(self, searchBarcode, searchDigitGroup):
-        success = False
-        minHMD = (constants.IMAGE_SIZE*constants.NUM_PROJECTIONS)+1
-        minBarcode = None
-        imageLoc = None
-        for i, barcode in enumerate(self.barcodes):
-            currentHMD = hammingDistance( barcode, searchBarcode)
-            if currentHMD == 0:
-                continue
-            elif currentHMD < minHMD:
-                minHMD = currentHMD
-                minBarcode = barcode
+        success = False # variable for holding the success information
+        minHMD = (constants.IMAGE_SIZE*constants.NUM_PROJECTIONS)+1 # Minimum Hamming Distance. It is (maxiumum hamming distance + 1) by default 
+        minBarcode = None # barcode that corresponds to the minimum hamming distance
+        imageLoc = None # result image location
+        for i, barcode in enumerate(self.barcodes): # loop through every barcode in the barcodes list
+            currentHMD = hammingDistance( barcode, searchBarcode) # check each bit in both barcodes and calculate how many of these not same
+            if currentHMD == 0: # hamming distance 0 means the barcodes are identical which means they are the same image
+                continue # skip
+            elif currentHMD < minHMD: # if the current calculated hamming distance is less than the minimum hamming distance 
+                minHMD = currentHMD # then set minimum hamming distance to current calculated hamming distance
+                minBarcode = barcode # set the current barcode as 
                 imageLoc = self.imageLocations[i]
 
         resultDigitGroup = imageLoc.split("_", 1)[0]
