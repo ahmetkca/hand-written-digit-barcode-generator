@@ -15,6 +15,11 @@ on Powershell
 ```
 .\.venv\Scripts\Activate.ps1
 ```
+OR 
+On Command Prompt
+```
+.venv\Scripts\activate.bat
+```
 
 You can install all the requirments by typing command line (you need to activate venv first)
 
