@@ -71,6 +71,9 @@ with open("barcodes.txt", 'w') as f:
 
 from PIL import Image, ImageDraw
 
+if not os.path.exists('barcodes'):
+    os.makedirs('barcodes')
+
 c = 1
 for barcode in barcodes:
     barcode.pop()
