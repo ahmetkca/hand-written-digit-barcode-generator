@@ -291,14 +291,14 @@ if __name__ == "__main__":
 
     print("Enter a number between 0 and 9 to search image")
     print("Enter a number smaller than 0 or greater than 9 to exit the search menu")
-    print("Once you exit Search  Menu you will get Calculate Accuracy Hit Ratio")
+    print("Once you exit Search  Menu you will get Calculate Accuracy Hit Ratio ")
     input("Yes I have read the above notes. Press Enter to continue...")
     si = SearchSimilar() # search menu
 
     print("\n\n\nCalculating accuracy hit ratio...")
     cahr = CalculateAccuracyHitRatio(barcodes, imageLocations) # accuracy calculator
     print("Accuracy is {}".format(cahr.calculateAccuracy())) # calculate and display the accuracy
-    input("Yes I have read the above notes. Press Enter to continue...")
+    input("Yes I have read the above notes. Press Enter to DISPLAY ALL THE RESULTS at Once...")
 
     print("\n\n\nSearching all the images in the dataset and finding results...")
     print("Once you get the window maximize the window and scrolldown to see the results")
