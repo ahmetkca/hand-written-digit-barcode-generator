@@ -1,47 +1,64 @@
 # hand-written-digit-barcode-generator
 
-First create a python virtual environment
-```
-py -m venv .venv
-```
+### Step 1
+> clone the repository
+> ```
+> git clone https://github.com/ahmetkca/hand-written-digit-barcode-generator.git
+> ```
 
-After you created the venv you need to activate it
-on Powershell
-```
-.\.venv\Scripts\Activate.ps1
-```
+### Step 2
+> First create a python virtual environment
+> ```
+> py -m venv .venv
+> ```
 
-You can install all the requirments by typing command line (you need to activate venv first)
+### Step 3
+> After you created the venv you need to activate it
+>
+> on Powershell
+> ```
+> .\.venv\Scripts\Activate.ps1
+> ```
+>
+> on Command Prompt
+> ```
+> .venv\Scripts\activate.bat
+> ```
 
-```
-pip install -r requirements.txt
-```
+### Step 4
+> You can install all the requirments by typing the following command (you need to activate venv first)
+>
+> ```
+> pip install -r requirements.txt
+> ```
 
-You can configure the constants.py file before running the run.bat
+### Step 5
+> You can configure the constants.py file before running the run.bat
+> 
+> After you configured you can run the run.bat by
+> 
+> on Powershell
+> ```
+> .\run.bat
+> ```
+> 
+> on Command Prompt
+> ```
+> run.bat
+> ```
 
-After you configured you can run the run.bat by
+### Step 6
+> run.bat file will create thresholds.txt and barcodes.txt files
+> 
+> You can run the program by typing following command on Powershell
+> ```
+> py .\search_similar_image.py
+> ```
 
-On Powershell
-```
-.\run.bat
-```
-OR
-
-On Command Prompt
-
-```
-run.bat
-```
-run.bat file will create thresholds.txt and barcodes.txt files
-
-You can run the program by typing following command on Powershell
-```
-py .\search_similar_image.py
-```
-
-Optionally you can create image of barcode by typing following command
-
-```
-py .\create_barcode_image.py
-```
-this python file will create image representation of binary barcode
+### Step 7 (Optional)
+> Optionally you can create image of barcode by typing following command
+> 
+> ```
+> py .\create_barcode_image.py
+> ```
+> this python file will create image representation of binary barcode
