@@ -283,88 +283,25 @@ class ScrollableWindow(QtWidgets.QMainWindow):
 
 
 if __name__ == "__main__":
-    si = SearchSimilar()
+    print("Search Menu")
+    print("Calculate Accuracy Hit Ratio")
+    print("Show All Results at Once")
+    input("Yes I have read the above notes. Press Enter to continue...")
+
+
+    print("Enter a number between 0 and 9 to search image")
+    print("Enter a number smaller than 0 or greater than 9 to exit the search menu")
+    print("Once you exit Search  Menu you will get Calculate Accuracy Hit Ratio")
+    input("Yes I have read the above notes. Press Enter to continue...")
+    si = SearchSimilar() # search menu
+
+    print("\n\n\nCalculating accuracy hit ratio...")
+    cahr = CalculateAccuracyHitRatio(barcodes, imageLocations) # accuracy calculator
+    print("Accuracy is {}".format(cahr.calculateAccuracy())) # calculate and display the accuracy
+    input("Yes I have read the above notes. Press Enter to continue...")
+
+    print("\n\n\nSearching all the images in the dataset and finding results...")
+    print("Once you get the window maximize the window and scrolldown to see the results")
+    input("Yes I have read the above notes. Press Enter to continue...")
     fig = si.showAllResults()
     a = ScrollableWindow(fig)
-    exit()
-    cahr = CalculateAccuracyHitRatio(barcodes, imageLocations)
-    print(cahr.calculateAccuracy())
-    # sc = SearchSimilar()
-
-# digitFolder = int(input("enter a digit (0 - 9): "))
-
-# directory = r'.\MNIST_DS\{}'.format(digitFolder)
-
-# for c, imageName in enumerate(os.listdir(directory)):
-#     print(c , " - ", imageName)
-
-# selectImage = int(input("select image from above list: "))
-
-# selectedImagePath = os.path.join(directory, os.listdir(directory)[selectImage])
-
-# print(selectedImagePath)
-
-# selectedImageBarcode = create_barcode(selectedImagePath)
-
-# minHMD = (constants.IMAGE_SIZE*constants.NUM_PROJECTIONS)+1
-# print(minHMD)
-# minBarcode = None
-# imageLoc = None
-# for i, barcode in enumerate(barcodes):
-#     print(imageLocations[i])
-#     currentHMD = hammingDistance( barcode,selectedImageBarcode)
-#     print(currentHMD)
-#     if currentHMD == 0:
-#         continue
-#     elif currentHMD < minHMD:
-#         minHMD = currentHMD
-#         minBarcode = barcode
-#         imageLoc = imageLocations[i]
-
-# print("Result:")
-# print("\tHD: {}".format(minHMD))
-# print("\tImage Location: {}".format(imageLoc))
-# print("\tBarcode: {}".format(minBarcode))
-
-# fig = plt.figure(figsize=(10, 7))
-# fig.suptitle("Hamming Distance: {}".format(minHMD))
-# rows, columns = 2, 2
-
-# selectedImage = cv2.imread(selectedImagePath)
-# resultImageRelativePath = imageLoc.split("_", 1)
-# resultImagePath = os.path.join(r".\MNIST_DS", r"{}\{}".format(resultImageRelativePath[0], resultImageRelativePath[1]))
-# resultImage = cv2.imread(resultImagePath)
-
-# from create_barcode_image import BarcodeImageGenerator as big
-
-# big.generate_barcode_image(selectedImageBarcode, r".\temp\searchImage.png")
-# big.generate_barcode_image(minBarcode, r".\temp\resultImage.png")
-
-# searchBarcodeImage = cv2.imread(r".\temp\searchImage.png")
-# resultBarcodeImage = cv2.imread(r".\temp\resultImage.png")
-
-# fig.add_subplot(rows, columns, 1)
-
-# plt.imshow(selectedImage)
-# plt.axis("off")
-# plt.title("Search Image")
-
-# fig.add_subplot(rows, columns, 2)
-
-# plt.imshow(resultImage)
-# plt.axis("off")
-# plt.title("Result Image")
-
-# fig.add_subplot(rows, columns, 3)
-
-# plt.imshow(searchBarcodeImage)
-# plt.axis("off")
-# plt.title("Search Barcode")
-
-# fig.add_subplot(rows, columns, 4)
-
-# plt.imshow(resultBarcodeImage)
-# plt.axis("off")
-# plt.title("Result Barcode")
-
-# plt.show()
