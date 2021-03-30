@@ -2,13 +2,13 @@
 
 ### Step 1
 > clone the repository
-> ```
+> ```bash
 > git clone https://github.com/ahmetkca/hand-written-digit-barcode-generator.git
 > ```
 
 ### Step 2
 > First create a python virtual environment
-> ```
+> ```bash
 > py -m venv .venv
 > ```
 
@@ -16,19 +16,19 @@
 > After you created the venv you need to activate it
 >
 > on Powershell
-> ```
+> ```bash
 > .\.venv\Scripts\Activate.ps1
 > ```
 >
 > on Command Prompt
-> ```
+> ```bash
 > .venv\Scripts\activate.bat
 > ```
 
 ### Step 4
-> You can install all the requirments by typing command line (you need to activate venv first)
+> You can install all the requirments by typing the following command (you need to activate venv first)
 >
-> ```
+> ```bash
 > pip install -r requirements.txt
 > ```
 
@@ -38,12 +38,12 @@
 > After you configured you can run the run.bat by
 > 
 > on Powershell
-> ```
+> ```bash
 > .\run.bat
 > ```
 > 
 > on Command Prompt
-> ```
+> ```bash
 > run.bat
 > ```
 
@@ -51,14 +51,14 @@
 > run.bat file will create thresholds.txt and barcodes.txt files
 > 
 > You can run the program by typing following command on Powershell
-> ```
+> ```bash
 > py .\search_similar_image.py
 > ```
 
 ### Step 7 (Optional)
 > Optionally you can create image of barcode by typing following command
 > 
-> ```
+> ```bash
 > py .\create_barcode_image.py
 > ```
 > this python file will create image representation of binary barcode
