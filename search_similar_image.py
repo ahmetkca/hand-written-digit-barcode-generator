@@ -289,7 +289,7 @@ if __name__ == "__main__":
     input("Yes I have read the above notes. Press Enter to continue...")
 
 
-    print("Enter a number between 0 and 9 to search image")
+    print("\n\n\nEnter a number between 0 and 9 to search image")
     print("Enter a number smaller than 0 or greater than 9 to exit the search menu")
     print("Once you exit Search  Menu you will get Calculate Accuracy Hit Ratio ")
     input("Yes I have read the above notes. Press Enter to continue...")
