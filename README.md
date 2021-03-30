@@ -4,6 +4,7 @@ clone the repository
 ```
 git clone https://github.com/ahmetkca/hand-written-digit-barcode-generator.git
 ```
+- - -
 
 First create a python virtual environment
 ```
