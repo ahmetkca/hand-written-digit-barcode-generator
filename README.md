@@ -2,7 +2,7 @@
 
 ### Step 1
 > clone the repository
-> ```batch
+> ```shell
 > git clone https://github.com/ahmetkca/hand-written-digit-barcode-generator.git
 > ```
 
