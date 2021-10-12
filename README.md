@@ -1,5 +1,7 @@
 # hand-written-digit-barcode-generator
 
+[Project Report](Data_Structures_Project_Report.pdf)
+
 ### Step 1
 > clone the repository
 > ```
